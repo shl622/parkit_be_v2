@@ -26,6 +26,7 @@
     "@fastify/swagger-ui": "^5.1.0",
     "@fastify/type-provider-typebox": "^5.0.1",
     "@sinclair/typebox": "^0.31.0",
+    "axios": "^1.7.8",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "fastify": "^5.1.0",

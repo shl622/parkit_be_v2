@@ -1,12 +1,10 @@
-import fastify from 'fastify';
 import cors from '@fastify/cors';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
-import { DataSource } from 'typeorm';
+import fastify from 'fastify';
+import { dataSource } from './config/database';
 import { rootRoutes } from './routes/root.routes';
-import { parkingMeterRoutes } from './routes/parking-meter.routes';
-import { ParkingMeter } from './models/parking-meter.model';
 
 const server = fastify({
   logger: true,
@@ -28,6 +26,8 @@ server.register(swagger, {
   }
 });
 
+server.decorate('dataSource', dataSource);
+
 // Register Swagger UI
 server.register(swaggerUi, {
   routePrefix: '/docs',
@@ -37,28 +37,13 @@ server.register(swaggerUi, {
   }
 });
 
-// Create TypeORM connection
-export const AppDataSource = new DataSource({
-  type: 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432'),
-  username: process.env.DB_USERNAME || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
-  database: process.env.DB_DATABASE || 'parkitv2',
-  synchronize: true,
-  logging: true,
-  entities: [ParkingMeter],
-  migrations: ['src/migrations/*.ts'],
-});
-
 // Register routes
 server.register(rootRoutes);
-server.register(parkingMeterRoutes);
 
 const start = async () => {
   try {
     // Initialize database connection
-    await AppDataSource.initialize();
+    await dataSource.initialize();
     console.log('Database connection initialized');
 
     // Start the server

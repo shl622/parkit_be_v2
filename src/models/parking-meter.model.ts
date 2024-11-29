@@ -19,10 +19,12 @@ export class ParkingMeter {
   location: Point;
 
   @Column()
-  active: boolean;
+  //active or inactive
+  status: boolean;
 
   @Column()
   hourlyRate: number;
+
 
   @CreateDateColumn()
   createdAt: Date;

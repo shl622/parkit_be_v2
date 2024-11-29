@@ -1,12 +1,12 @@
 import { Repository } from 'typeorm';
-import { AppDataSource } from '../main';
 import { ParkingMeter } from '../models/parking-meter.model';
+import { dataSource } from '../config/database';
 
 export class ParkingMeterService {
   private repository: Repository<ParkingMeter>;
 
   constructor() {
-    this.repository = AppDataSource.getRepository(ParkingMeter);
+    this.repository = dataSource.getRepository(ParkingMeter);
   }
 
   async findAll(): Promise<ParkingMeter[]> {
